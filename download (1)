@@ -1,0 +1,1552 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  BookOpen, 
+  MessageSquareCode, 
+  Mail, 
+  Smartphone, 
+  CheckCircle2, 
+  ArrowLeft, 
+  ArrowRight, 
+  ChevronRight, 
+  ChevronDown, 
+  Send, 
+  Globe, 
+  Sparkles, 
+  Check, 
+  ExternalLink,
+  Info,
+  Menu,
+  X,
+  Trophy,
+  Award,
+  Zap,
+  Bookmark,
+  BookMarked,
+  Clock
+} from 'lucide-react';
+import { curriculumLessons, WeekLesson } from './curriculumData';
+
+// Custom, premium and beautiful vector insignia logo for Team 21 Servant Leadership Academy
+function Team21Logo({ className = "w-10 h-10" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        {/* Globe Blue Spherical Gradient */}
+        <radialGradient id="globe-sphere" cx="45%" cy="45%" r="60%">
+          <stop offset="0%" stopColor="#2563eb" /> {/* Solid Royal Blue */}
+          <stop offset="60%" stopColor="#1d4ed8" /> {/* Classic Navy */}
+          <stop offset="100%" stopColor="#1e3a8a" /> {/* Deep Midnight */}
+        </radialGradient>
+        {/* Glowing Aurum/Gold Gradient for Cross and Highlights */}
+        <linearGradient id="aurum-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fbbf24" /> {/* Bright Gold */}
+          <stop offset="40%" stopColor="#f59e0b" /> {/* Classic Amber */}
+          <stop offset="100%" stopColor="#b45309" /> {/* Rich Bronze */}
+        </linearGradient>
+        {/* Soft Shadow behind the central emblem */}
+        <filter id="emblem-shadow" x="-10%" y="-10%" width="130%" height="130%">
+          <shadowColor value="#020617" />
+          <feDropShadow dx="0" dy="2" stdDeviation="2" floodOpacity="0.5" />
+        </filter>
+      </defs>
+
+      {/* 1. Outer Noble Crest / Medallion Rim */}
+      <circle cx="50" cy="50" r="48" fill="#1e293b" stroke="url(#aurum-gold)" strokeWidth="2.5" />
+      <circle cx="50" cy="50" r="44" stroke="#f59e0b" strokeWidth="0.75" strokeDasharray="3 2" strokeOpacity="0.5" />
+
+      {/* 2. Inner Sacred Globe Sphere */}
+      <circle cx="50" cy="50" r="38" fill="url(#globe-sphere)" filter="url(#emblem-shadow)" />
+
+      {/* 3. Authentic Globe Grid Lines (Latitudes and Longitudes) */}
+      {/* Equator */}
+      <path d="M12 50 Q50 50 88 50" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.4" fill="none" />
+      {/* Tropic of Cancer & Capricorn (Latitudes) */}
+      <path d="M15 35 Q50 38 85 35" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.35" fill="none" />
+      <path d="M15 65 Q50 62 85 65" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.35" fill="none" />
+      {/* Prime Meridian */}
+      <path d="M50 12 Q50 50 50 88" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.4" fill="none" />
+      {/* Curved Meridians (Longitudes) */}
+      <path d="M50 12 Q30 50 50 88" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.3" fill="none" />
+      <path d="M50 12 Q70 50 50 88" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.3" fill="none" />
+      <path d="M50 12 Q18 50 50 88" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.15" fill="none" />
+      <path d="M50 12 Q82 50 50 88" stroke="#60a5fa" strokeWidth="0.75" strokeOpacity="0.15" fill="none" />
+
+      {/* 4. The Authentic Christian Cross of DAI Servant Leadership */}
+      <g filter="url(#emblem-shadow)">
+        {/* Glowing Orange Outline for Majesty */}
+        <path d="M47 30 H53 V68 H47 Z M36 41 H64 V47 H36 Z" fill="#ea580c" opacity="0.4" transform="translate(0, -1)" />
+        {/* Actual Golden Cross */}
+        <path d="M48 29 H52 V67 H48 Z M37 40 H63 V46 H37 Z" fill="url(#aurum-gold)" />
+      </g>
+
+      {/* 5. Center-Bottom "TEAM 21" Ribbon Panel */}
+      <g filter="url(#emblem-shadow)">
+        {/* Rounded Banner Frame */}
+        <rect x="25" y="65" width="50" height="15" rx="4" fill="#0f172a" stroke="url(#aurum-gold)" strokeWidth="1.5" />
+        {/* Bold, premium Team Typography */}
+        <text x="50" y="76" fill="#fef08a" fontSize="9" fontWeight="950" fontFamily="system-ui, sans-serif" textAnchor="middle" letterSpacing="0.75">
+          TEAM 21
+        </text>
+      </g>
+
+      {/* 6. Five Stars of Academic & Servant Distinction */}
+      <g fill="#fbbf24">
+        {/* Star 1 (Left) */}
+        <polygon points="18,18 20,21 23,21 21,23 22,26 18,24 14,26 15,23 13,21 16,21" />
+        {/* Star 2 (Middle Left) */}
+        <polygon points="34,10 36,13 39,13 37,15 38,18 34,16 30,18 31,15 29,13 32,13" transform="scale(0.9) translate(4, 1)" />
+        {/* Star 3 (Top Center) */}
+        <polygon points="50,4 52,7 55,7 53,9 54,12 50,10 46,12 47,9 45,7 48,7" transform="scale(0.9) translate(5, -1)" />
+        {/* Star 4 (Middle Right) */}
+        <polygon points="66,10 68,13 71,13 69,15 70,18 66,16 62,18 63,15 61,13 64,13" transform="scale(0.9) translate(7, 1)" />
+        {/* Star 5 (Right) */}
+        <polygon points="82,18 84,21 87,21 85,23 86,26 82,24 78,26 79,23 77,21 80,21" />
+      </g>
+
+      {/* 7. Tiny delicate inner details for custom prestige */}
+      <circle cx="50" cy="50" r="2" fill="#ffffff" opacity="0.7" />
+    </svg>
+  );
+}
+
+export default function App() {
+  // --- Persistent Global States ---
+  const [language, setLanguage] = useState<'en' | 'fr'>(() => {
+    return (localStorage.getItem('team21_lang') as 'en' | 'fr') || 'en';
+  });
+
+  const [currentView, setCurrentView] = useState<'home' | 'dashboard' | 'reader' | 'help' | 'contact'>(() => {
+    const saved = localStorage.getItem('team21_view');
+    if (saved === 'dashboard') return 'home'; // Default back to home on relaunch
+    return (saved as any) || 'home';
+  });
+
+  const [selectedWeek, setSelectedWeek] = useState<number>(() => {
+    const saved = localStorage.getItem('team21_selected_week');
+    return saved ? parseInt(saved, 10) : 1;
+  });
+
+  const [completedWeeks, setCompletedWeeks] = useState<number[]>(() => {
+    const saved = localStorage.getItem('team21_completed_weeks');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // --- Mobile Menu Toggle ---
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // --- Chat Bot State ---
+  const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant', content: string, timestamp: Date, status?: string }>>(() => {
+    return [
+      {
+        role: 'assistant',
+        content: language === 'fr' 
+          ? "Bonjour de la part de l'équipe Team 21 ! Je suis votre assistant virtuel de formation au leadership serviteur. Posez-moi des questions sur les leçons d'une semaine spécifique ou sur notre programme général de leadership serviteur."
+          : "Hello from Team 21! I am your virtual servant leadership training assistant. Ask me questions about a specific week's lessons or our general servant-leadership philosophy.",
+        timestamp: new Date()
+      }
+    ];
+  });
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // --- Contact Form State ---
+  const [contactName, setContactName] = useState('');
+  const [contactSubject, setContactSubject] = useState('');
+  const [contactMessage, setContactMessage] = useState('');
+  const [formErrors, setFormErrors] = useState<{ name?: string; subject?: string; message?: string }>({});
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // --- FAQ Toggles ---
+  const [faqOpen, setFaqOpen] = useState<{ [key: number]: boolean }>({ 0: true });
+
+  // --- Persist State Changes ---
+  useEffect(() => {
+    localStorage.setItem('team21_lang', language);
+  }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('team21_view', currentView);
+  }, [currentView]);
+
+  useEffect(() => {
+    localStorage.setItem('team21_selected_week', selectedWeek.toString());
+  }, [selectedWeek]);
+
+  useEffect(() => {
+    localStorage.setItem('team21_completed_weeks', JSON.stringify(completedWeeks));
+  }, [completedWeeks]);
+
+  // Scroll chat to bottom on new message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages, chatLoading]);
+
+  // Translate initial message if language changes
+  useEffect(() => {
+    if (chatMessages.length === 1) {
+      setChatMessages([
+        {
+          role: 'assistant',
+          content: language === 'fr'
+            ? "Bonjour de la part de l'équipe Team 21 ! Je suis votre assistant virtuel de formation au leadership serviteur. Posez-moi des questions sur les leçons d'une semaine spécifique ou sur notre programme général de leadership serviteur."
+            : "Hello from Team 21! I am your virtual servant leadership training assistant. Ask me questions about a specific week's lessons or our general servant-leadership philosophy.",
+          timestamp: new Date()
+        }
+      ]);
+    }
+  }, [language]);
+
+  // --- Helper Toggles & Logic ---
+  const toggleWeekCompletion = (weekNum: number) => {
+    if (completedWeeks.includes(weekNum)) {
+      setCompletedWeeks(completedWeeks.filter(w => w !== weekNum));
+    } else {
+      setCompletedWeeks([...completedWeeks, weekNum]);
+    }
+  };
+
+  const handleOpenWeek = (weekNum: number) => {
+    setSelectedWeek(weekNum);
+    setCurrentView('reader');
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNextWeek = () => {
+    if (selectedWeek < 21) {
+      setSelectedWeek(selectedWeek + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handlePrevWeek = () => {
+    if (selectedWeek > 1) {
+      setSelectedWeek(selectedWeek - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // --- Chat Bot Submission ---
+  const handleSendChatMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const userMsg = chatInput.trim();
+    setChatInput('');
+
+    // Append user message
+    const updatedMessages = [
+      ...chatMessages,
+      { role: 'user' as const, content: userMsg, timestamp: new Date() }
+    ];
+    setChatMessages(updatedMessages);
+    setChatLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: updatedMessages.map(m => ({ role: m.role, content: m.content })),
+          language
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("API call failed");
+      }
+
+      const data = await response.json();
+      setChatMessages(prev => [
+        ...prev,
+        { role: 'assistant' as const, content: data.text, timestamp: new Date() }
+      ]);
+    } catch (err) {
+      console.error(err);
+      const errText = language === 'fr'
+        ? "Je rencontre un léger problème technique. Vous pouvez directement poser votre question à notre coordinateur humain au +237 694 294 406 ou par e-mail à forteh@gmail.com."
+        : "I'm experiencing a quick technical difficulty. You can directly ask your question to our human coordinator at +237 694 294 406 or by emailing forteh@gmail.com.";
+      
+      setChatMessages(prev => [
+        ...prev,
+        { role: 'assistant' as const, content: errText, timestamp: new Date(), status: 'error' }
+      ]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  // --- Contact Form Submission ---
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const errors: { name?: string; subject?: string; message?: string } = {};
+
+    if (!contactName.trim()) {
+      errors.name = language === 'fr' ? "Le nom est requis" : "Name is required";
+    }
+    if (!contactSubject.trim()) {
+      errors.subject = language === 'fr' ? "Le sujet est requis" : "Subject is required";
+    }
+    if (!contactMessage.trim()) {
+      errors.message = language === 'fr' ? "Le message est requis" : "Message is required";
+    }
+
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      setFormSubmitted(true);
+      
+      // Construct pre-filled email mailto redirect
+      const mailtoUrl = `mailto:forteh@gmail.com?subject=${encodeURIComponent(contactSubject)}&body=${encodeURIComponent(
+        `Hi Team 21 Team,\n\nMy Name: ${contactName}\n\nMessage:\n${contactMessage}\n\n---\nSubmitted is from Team 21 curriculum website.`
+      )}`;
+      
+      // Auto trigger mail client open after a short delay
+      setTimeout(() => {
+        window.location.href = mailtoUrl;
+      }, 800);
+    }
+  };
+
+  const handleResetContactForm = () => {
+    setContactName('');
+    setContactSubject('');
+    setContactMessage('');
+    setFormSubmitted(false);
+    setFormErrors({});
+  };
+
+  // Filter lessons based on search
+  const filteredLessons = curriculumLessons.filter((lesson) => {
+    const searchLow = searchQuery.toLowerCase();
+    const title = language === 'fr' ? lesson.titleFR : lesson.titleEN;
+    const summary = language === 'fr' ? lesson.summaryFR : lesson.summaryEN;
+    const content = language === 'fr' ? lesson.contentFR : lesson.contentEN;
+
+    return (
+      title.toLowerCase().includes(searchLow) ||
+      summary.toLowerCase().includes(searchLow) ||
+      content.toLowerCase().includes(searchLow) ||
+      `week ${lesson.week}`.includes(searchLow) ||
+      `semaine ${lesson.week}`.includes(searchLow)
+    );
+  });
+
+  const activeLesson = curriculumLessons.find(l => l.week === selectedWeek) || curriculumLessons[0];
+
+  // --- Translation Dictionary ---
+  const t = {
+    brand: "TEAM 21",
+    subtitle: language === 'fr' ? "Académie de Leadership Serviteur" : "Servant Leadership Academy",
+    home: language === 'fr' ? "Accueil" : "Home",
+    dashboard: language === 'fr' ? "Leçons (1-21)" : "Lessons (1-21)",
+    reader: language === 'fr' ? "Lecteur de Module" : "Module Reader",
+    help: language === 'fr' ? "Assistant IA" : "AI Mentor",
+    contact: language === 'fr' ? "Contacter Directement" : "Direct Contact",
+    langToggle: language === 'fr' ? "English" : "Français",
+    courseProgress: language === 'fr' ? "Votre progression de la formation" : "Academy Learning Progress",
+    weeksCompleted: language === 'fr' ? "semaines complétées" : "weeks completed",
+    searchPlaceholder: language === 'fr' ? "Rechercher une leçon, un mot-clé ou un concept..." : "Search weeks, keywords or leadership concepts...",
+    weekNum: language === 'fr' ? "Semaine" : "Week",
+    markCompleted: language === 'fr' ? "Marquer comme complété" : "Mark Completed",
+    completed: language === 'fr' ? "Terminée" : "Completed",
+    objectivesTitle: language === 'fr' ? "Objectifs d'Apprentissage" : "Learning Objectives",
+    exerciseTitle: language === 'fr' ? "Exercice Pratique d'Intégration" : "Practical Integration Exercise",
+    quoteTitle: language === 'fr' ? "Parole de Sagesse" : "Words of Wisdom",
+    next: language === 'fr' ? "Semaine Suivante" : "Next Week",
+    prev: language === 'fr' ? "Semaine Précédente" : "Previous Week",
+    navigation: language === 'fr' ? "Contrôle du hub" : "Weekly Navigator",
+    supportTitle: language === 'fr' ? "Centre d'Aide & Assistant IA" : "Support Center",
+    faqTitle: language === 'fr' ? "Questions Fréquentes" : "Frequently Asked Questions",
+    whatsappTitle: language === 'fr' ? "Contact WhatsApp en un clic" : "One-Click WhatsApp Hub",
+    whatsappCardDesc: language === 'fr' ? "Échangez directement avec un responsable Team 21 sur WhatsApp." : "Instantly open a direct WhatsApp chat window with a coordinator.",
+    whatsappBtn: language === 'fr' ? "Lancer WhatsApp Chat" : "Launch WhatsApp Chat",
+    emailTitle: language === 'fr' ? "Formulaire de Contact par E-mail" : "Email Administration Desk",
+    emailCardDesc: language === 'fr' ? "Soumettez vos questions par e-mail directement à forteh@gmail.com." : "Submit specific emails to coordinator at forteh@gmail.com.",
+    fullname: language === 'fr' ? "Votre Nom complet" : "Your Full Name",
+    subject: language === 'fr' ? "Objet du Message" : "Subject of Message",
+    message: language === 'fr' ? "Votre message" : "Your Message",
+    sendBtn: language === 'fr' ? "Ouvrir votre client de messagerie" : "Submit & Open Email Client",
+    formSuccess: language === 'fr' ? "Prêt à envoyer ! Nous ouvrons votre messagerie..." : "Ready to send! Launching your native email client...",
+    writeAnother: language === 'fr' ? "Écrire un autre message" : "Write Another Message",
+    hoursIndicator: language === 'fr' ? "21 leçons complètes" : "21 complete lessons",
+    noMatch: language === 'fr' ? "Aucune leçon ne correspond à votre recherche." : "No curriculum weeks match your research query.",
+    botHeaderDesc: language === 'fr' ? "Assistant Mentor IA Team 21" : "Team 21 AI Mentor Trainer",
+    chatInputPlaceholder: language === 'fr' ? "Posez une question sur le leadership, la semaine 5, l'humilité ou l'écoute..." : "Ask about empathy, Week 5, active listening...",
+    humanAlternative: language === 'fr' ? "Besoin d'un coordinateur humain ? Contactez-nous au 694294406." : "Need manual coordinates? Call +237 694294406.",
+    
+    // Simple Explanation Texts for 10-year old
+    homeTitle: language === 'fr' ? "Grandir en tant que leader est facile, utile et super amusant !" : "Becoming an amazing leader is simple, helpful, and super fun!",
+    homeSubtitle: language === 'fr' ? "Bienvenue à l'Académie de Leadership Team 21. Apprends à guider de la plus belle façon : en aidant les autres !" : "Welcome to Team 21 Servant Leadership Academy. Learn the best way to lead others: by lifting them up!",
+    ctaExplore: language === 'fr' ? "📖 Parcourir les 21 Leçons" : "📖 Explore the 21 Lessons",
+    whatIsServantTitle: language === 'fr' ? "🤝 C'est quoi le Leadership Serviteur ?" : "🤝 What is Servant Leadership?",
+    whatIsServantDesc: language === 'fr' ? "C'est très simple ! Un chef classique donne juste des ordres. Un leader serviteur, lui, écoute son équipe de tout son cœur, l'encourage et fait tout pour l'aider à réussir. C'est l'écoute active, la gentillesse et le respect !" : "It's super simple! A regular boss just tells people what to do. A servant leader listens to their team with care, encourages them, and helps them succeed. It is all about kindness, respect, and helping others!",
+    howItWorksTitle: language === 'fr' ? "🚀 Comment fonctionne l'Académie ?" : "🚀 How does the Academy work?",
+    howItWorksDesc: language === 'fr' ? "Nous t'avons préparé 21 leçons faciles. Chaque semaine, lis le petit texte court plein de secrets, découvre les objectifs motivants, puis réalise le défi amusant proposé. C'est magique !" : "You have 21 easy lessons. Each week, read the short page filled with useful secrets, check out the simple goals, and complete one active challenge in real life to practice. It is like training a superpower!",
+    aiCompanionTitle: language === 'fr' ? "💬 Ton Assistant Mentor IA" : "💬 Talk to your AI Mentor Ally",
+    aiCompanionDesc: language === 'fr' ? "Tu as une question sur l'écoute active, l'humilité ou le module de la semaine 4 ? Notre super Assistant IA à commande vocale ou écrite te répond tout de suite !" : "Have questions about listening, helping friends, or Week 4? Ask our friendly AI Mentor, and get answers immediately in French or English!",
+    aiCompanionBtn: language === 'fr' ? "Discuter avec l'IA" : "Chat with your AI Mentor",
+    humanHelpTitle: language === 'fr' ? "📞 Besoin d'Aide Directe ?" : "📞 Reach our Human Team",
+    humanHelpDesc: language === 'fr' ? "Nos coordinateurs humains sont adorables ! Écris-leur ou appelle-les sur WhatsApp à tout moment pour de l'aide en direct sur tes devoirs." : "Our human coordinators are super friendly! Write to them or call them on WhatsApp at any time for direct assistance with any lesson.",
+    humanHelpBtn: language === 'fr' ? "Contacter forteh@gmail.com" : "Get Direct Support"
+  };
+
+  const percentComplete = Math.round((completedWeeks.length / 21) * 100);
+
+  // Reusable hover state class to strictly enforce specifications
+  const microInteractionClassName = "transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:border-blue-500/50";
+
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+      
+      {/* --- GLOWING BACKGROUND DECORATIONS (AI-Professional theme) --- */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+      {/* --- HEADER --- */}
+      <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 h-18 flex items-center justify-between">
+          
+          {/* Logo / Title */}
+          <div 
+            onClick={() => { setCurrentView('home'); setMobileMenuOpen(false); }} 
+            className="flex items-center gap-3 cursor-pointer group"
+          >
+            <Team21Logo className="w-10 h-10 group-hover:scale-105 transition-all" />
+            <div>
+              <span className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent block line-height-none">
+                {t.brand}
+              </span>
+              <p className="text-xs text-slate-400 font-medium tracking-wide">
+                {t.subtitle}
+              </p>
+            </div>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
+            <button
+              id="nav-nav-home"
+              onClick={() => setCurrentView('home')}
+              className={`px-4 py-2 font-semibold text-sm rounded-lg transition-all ${
+                currentView === 'home' 
+                  ? 'bg-slate-900 border border-blue-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/60'
+              }`}
+            >
+              {t.home}
+            </button>
+            <button
+              id="nav-nav-dashboard"
+              onClick={() => setCurrentView('dashboard')}
+              className={`px-4 py-2 font-semibold text-sm rounded-lg transition-all ${
+                currentView === 'dashboard' || currentView === 'reader'
+                  ? 'bg-slate-900 border border-blue-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/60'
+              }`}
+            >
+              {t.dashboard}
+            </button>
+            <button
+              id="nav-nav-help"
+              onClick={() => setCurrentView('help')}
+              className={`px-4 py-2 font-semibold text-sm rounded-lg transition-all ${
+                currentView === 'help' 
+                  ? 'bg-slate-900 border border-blue-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/60'
+              }`}
+            >
+              {t.help}
+            </button>
+            <button
+              id="nav-nav-contact"
+              onClick={() => setCurrentView('contact')}
+              className={`px-4 py-2 font-semibold text-sm rounded-lg transition-all ${
+                currentView === 'contact' 
+                  ? 'bg-slate-900 border border-blue-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/60'
+              }`}
+            >
+              {t.contact}
+            </button>
+          </nav>
+
+          {/* Language Gateway & Desktop Side Actions */}
+          <div className="hidden lg:flex items-center gap-4">
+            <button
+              id="btn-lang-switcher"
+              onClick={() => setLanguage(language === 'en' ? 'fr' : 'en')}
+              className="flex items-center gap-2 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-850 hover:border-blue-500/40 text-slate-300 transition-all cursor-pointer shadow-sm shadow-black"
+            >
+              <Globe className="w-3.5 h-3.5 text-blue-500" />
+              <span>{t.langToggle}</span>
+            </button>
+
+            {/* Overall Progress micro badge */}
+            <div className="flex items-center gap-2.5 bg-slate-900/80 border border-slate-800 rounded-lg px-3 py-1.5">
+              <Trophy className="w-4 h-4 text-emerald-500" />
+              <div className="text-right">
+                <p className="text-[10px] font-semibold text-slate-400 leading-none">PROGRESS</p>
+                <p className="text-xs font-bold text-emerald-400 leading-none mt-1">{percentComplete}%</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Hamburguer */}
+          <div className="flex lg:hidden items-center gap-3">
+            <button
+              id="btn-lang-switcher-mobile"
+              onClick={() => setLanguage(language === 'en' ? 'fr' : 'en')}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-extrabold uppercase tracking-widest rounded-lg border border-slate-700 bg-slate-900 text-slate-300"
+            >
+              <Globe className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{language === 'fr' ? "EN" : "FR"}</span>
+            </button>
+
+            <button
+              id="btn-mobile-menu"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-slate-400 hover:text-slate-100 bg-slate-900 rounded-lg border border-slate-850"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Dropdown */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-b border-slate-800 bg-slate-950 px-4 py-4 space-y-2 flex flex-col shadow-2xl">
+            <button
+              id="nav-mob-home"
+              onClick={() => { setCurrentView('home'); setMobileMenuOpen(false); }}
+              className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold ${
+                currentView === 'home' ? 'bg-slate-900 text-cyan-400 border border-blue-500/25' : 'text-slate-400'
+              }`}
+            >
+              {t.home}
+            </button>
+            <button
+              id="nav-mob-dashboard"
+              onClick={() => { setCurrentView('dashboard'); setMobileMenuOpen(false); }}
+              className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold ${
+                currentView === 'dashboard' || currentView === 'reader' ? 'bg-slate-900 text-cyan-400 border border-blue-500/25' : 'text-slate-400'
+              }`}
+            >
+              {t.dashboard}
+            </button>
+            <button
+              id="nav-mob-help"
+              onClick={() => { setCurrentView('help'); setMobileMenuOpen(false); }}
+              className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold ${
+                currentView === 'help' ? 'bg-slate-900 text-cyan-400 border border-blue-500/25' : 'text-slate-400'
+              }`}
+            >
+              {t.help}
+            </button>
+            <button
+              id="nav-mob-contact"
+              onClick={() => { setCurrentView('contact'); setMobileMenuOpen(false); }}
+              className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold ${
+                currentView === 'contact' ? 'bg-slate-900 text-cyan-400 border border-blue-500/25' : 'text-slate-400'
+              }`}
+            >
+              {t.contact}
+            </button>
+
+            {/* Mobile progress summary */}
+            <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-850 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Trophy className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-bold text-slate-300">{t.courseProgress}</span>
+              </div>
+              <span className="text-xs font-black text-emerald-400">{percentComplete}%</span>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* --- MAIN CORE BODY --- */}
+      <main className="flex-grow w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-10 z-10">
+
+        {/* --- PROGRESS BAR (Visible on Home, Curriculum, & Reader) --- */}
+        {(currentView === 'home' || currentView === 'dashboard' || currentView === 'reader') && (
+          <div className="mb-8 p-5 bg-slate-900/40 rounded-2xl border border-slate-800/80 backdrop-blur-sm">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2.5">
+              <div className="flex items-center gap-2.5">
+                <Award className="w-5 h-5 text-cyan-400 fill-cyan-400/10" />
+                <div>
+                  <h3 className="font-bold text-sm text-slate-200">
+                    {t.courseProgress}
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    {completedWeeks.length} / 21 {t.weeksCompleted} ({percentComplete}%)
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-1.5 md:self-end">
+                <Zap className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs text-slate-300 font-medium">
+                  {language === 'fr' 
+                    ? "Inspirer, guider et soutenir les autres avec respect" 
+                    : "Inspire, guide, and support others with respect"}
+                </span>
+              </div>
+            </div>
+            
+            <div className="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-850">
+              <div 
+                className="bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 h-full rounded-full transition-all duration-500 ease-out"
+                style={{ width: `${percentComplete}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* VIEW 0: WELCOMING & ENCOURAGING HOME PORTAL */}
+        {/* ========================================================================= */}
+        {currentView === 'home' && (
+          <div className="space-y-10 animate-fade-in">
+            {/* Main Title Hero Banner */}
+            <div className="text-center bg-gradient-to-b from-slate-900/60 to-slate-950/20 p-8 md:p-14 border border-slate-800 rounded-3xl relative overflow-hidden backdrop-blur-sm shadow-xl">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+              
+              <div className="max-w-4xl mx-auto flex flex-col items-center">
+                {/* Embedded Big Premium Brand Symbol */}
+                <div className="w-24 h-24 mb-6 transition-all duration-300 hover:rotate-6">
+                  <Team21Logo className="w-full h-full drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
+                </div>
+
+                <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-6 leading-tight">
+                  {t.homeTitle}
+                </h1>
+                
+                <p className="text-slate-300 text-sm md:text-lg max-w-2xl leading-relaxed mb-8 font-medium">
+                  {t.homeSubtitle}
+                </p>
+
+                {/* Primary massive high-impact CTA button */}
+                <button
+                  id="btn-home-cta-explore"
+                  onClick={() => { setCurrentView('dashboard'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 text-slate-950 font-black tracking-wide text-sm rounded-2xl shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:scale-[1.03] hover:shadow-cyan-500/45 uppercase flex items-center gap-3 cursor-pointer"
+                >
+                  <span>{t.ctaExplore}</span>
+                  <ArrowRight className="w-5 h-5 text-slate-950 animate-pulse" />
+                </button>
+              </div>
+            </div>
+
+            {/* Structured Bento Information Grid (Bilingual & highly educational) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Card 1: What is Servant Leadership */}
+              <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col justify-between transition-all duration-300 hover:border-slate-700/60 shadow-md">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-blue-950/80 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-5">
+                    <BookOpen className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-bold text-white mb-3">
+                    {t.whatIsServantTitle}
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
+                    {t.whatIsServantDesc}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 2: How It Works */}
+              <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col justify-between transition-all duration-300 hover:border-slate-700/60 shadow-md">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-emerald-950/80 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5">
+                    <CheckCircle2 className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-bold text-white mb-3">
+                    {t.howItWorksTitle}
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-medium">
+                    {t.howItWorksDesc}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 3: Ask AI Companion */}
+              <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col justify-between transition-all duration-300 hover:border-slate-700/60 shadow-md">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-5">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-bold text-slate-100 mb-3">
+                    {t.aiCompanionTitle}
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-400 leading-relaxed mb-6 font-medium">
+                    {t.aiCompanionDesc}
+                  </p>
+                </div>
+                <button
+                  id="btn-home-cta-ai"
+                  onClick={() => { setCurrentView('help'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="w-full py-3 border border-cyan-500/30 text-cyan-400 hover:text-white hover:bg-cyan-950/30 rounded-xl text-xs font-bold transition-all text-center uppercase cursor-pointer"
+                >
+                  {t.aiCompanionBtn}
+                </button>
+              </div>
+
+              {/* Card 4: Phone & Coordinator coordinates */}
+              <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col justify-between transition-all duration-300 hover:border-slate-700/60 shadow-md">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-purple-950/80 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5">
+                    <Smartphone className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg md:text-xl font-bold text-slate-100 mb-3">
+                    {t.humanHelpTitle}
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-400 leading-relaxed mb-6 font-medium">
+                    {t.humanHelpDesc}
+                  </p>
+                </div>
+                <button
+                  id="btn-home-cta-contact"
+                  onClick={() => { setCurrentView('contact'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="w-full py-3 border border-purple-500/30 text-purple-400 hover:text-white hover:bg-purple-950/30 rounded-xl text-xs font-bold transition-all text-center uppercase cursor-pointer"
+                >
+                  {t.humanHelpBtn}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* VIEW 1: CHRONOLOGICAL CURRICULUM HUBS */}
+        {/* ========================================================================= */}
+        {currentView === 'dashboard' && (
+          <div>
+            
+            {/* Intro Hero Section */}
+            <div className="mb-10 text-center md:text-left">
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4 animate-fade-in">
+                {language === 'fr' 
+                  ? "Explorez les 21 Semaines du Leadership" 
+                  : "Explore the 21-Week Leadership Curriculum"}
+              </h1>
+              <p className="text-slate-300 text-base md:text-lg max-w-3xl leading-relaxed">
+                {language === 'fr'
+                  ? "Un parcours guidé complet pour transformer votre approche de la gestion des hommes. Apprenez pas à pas avec clarté, efficacité et des leçons courtes."
+                  : "A complete masterclass curriculum on servant leadership. Each of the 21 chapters is fully-coded with clear summaries, key exercises, and direct action-based instruction."}
+              </p>
+            </div>
+
+            {/* Live Search and Filters */}
+            <div className="mb-8 flex flex-col md:flex-row gap-4 items-center">
+              <div className="relative w-full md:flex-1">
+                <input
+                  id="input-curriculum-search"
+                  type="text"
+                  placeholder={t.searchPlaceholder}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-5 py-3 pl-12 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/60 focus:shadow-[0_0_15px_rgba(6,182,212,0.15)] transition-all"
+                />
+                <BookOpen className="w-5 h-5 absolute left-4 top-3.5 text-slate-500" />
+                {searchQuery && (
+                  <button 
+                    id="btn-clear-search"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-3.5 text-xs text-cyan-400 hover:text-white"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              
+              <div className="flex gap-2 shrink-0 self-start md:self-auto text-xs bg-slate-900/60 p-1.5 border border-slate-800/80 rounded-xl">
+                <span className="px-3.5 py-1.5 rounded-lg text-slate-400 font-mono flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" /> {t.hoursIndicator}
+                </span>
+              </div>
+            </div>
+
+            {/* Grid Container */}
+            {filteredLessons.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredLessons.map((lesson) => {
+                  const isCompleted = completedWeeks.includes(lesson.week);
+                  return (
+                    <div
+                      id={`week-card-${lesson.week}`}
+                      key={lesson.week}
+                      onClick={() => handleOpenWeek(lesson.week)}
+                      className={`group bg-slate-900/40 hover:bg-slate-900 border ${
+                        isCompleted 
+                          ? 'border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.05)]' 
+                          : 'border-slate-850'
+                      } rounded-2xl p-6 cursor-pointer relative overflow-hidden ${microInteractionClassName}`}
+                    >
+                      {/* Subtle accent corner glow of green or blue */}
+                      <div className={`absolute top-0 right-0 w-24 h-24 rounded-full blur-2xl opacity-10 pointer-events-none group-hover:opacity-30 transition-all ${
+                        isCompleted ? 'bg-emerald-500' : 'bg-blue-500'
+                      }`}></div>
+
+                      {/* Top Header Row of Card */}
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-xs font-mono font-bold uppercase tracking-widest text-cyan-400 bg-cyan-950/40 border border-cyan-800/30 px-3 py-1 rounded-full">
+                          {t.weekNum} {lesson.week}
+                        </span>
+                        
+                        <button
+                          id={`btn-complete-toggle-card-${lesson.week}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleWeekCompletion(lesson.week);
+                          }}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${
+                            isCompleted 
+                              ? 'bg-emerald-950/50 border-emerald-500 hover:border-emerald-400 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
+                              : 'border-slate-700 bg-slate-950/20 text-slate-500 hover:border-blue-500/50 hover:text-blue-400'
+                          }`}
+                        >
+                          {isCompleted ? <Check className="w-4 h-4 text-emerald-400" /> : <div className="w-2 h-2 rounded-full bg-slate-600 group-hover:bg-cyan-400 transition-colors"></div>}
+                        </button>
+                      </div>
+
+                      {/* Titles & summaries */}
+                      <h3 className="text-lg font-bold text-slate-100 group-hover:text-cyan-300 transition-colors mb-2 leading-snug">
+                        {language === 'fr' ? lesson.titleFR : lesson.titleEN}
+                      </h3>
+                      
+                      <p className="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-5">
+                        {language === 'fr' ? lesson.summaryFR : lesson.summaryEN}
+                      </p>
+
+                      {/* Footer link trigger representation */}
+                      <div className="flex items-center justify-between pt-4 border-t border-slate-850">
+                        <span className="text-xs font-medium text-slate-500 group-hover:text-slate-300 transition-colors flex items-center gap-1">
+                          {language === 'fr' ? "Lire la leçon complète" : "Read Full Chapter"}
+                        </span>
+                        <ChevronRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 transition-transform group-hover:text-blue-400" />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="py-16 text-center border border-dashed border-slate-800 rounded-3xl bg-slate-900/10">
+                <Info className="w-10 h-10 text-slate-600 mx-auto mb-3" />
+                <p className="text-base text-slate-400">{t.noMatch}</p>
+                <button 
+                  id="btn-all-lessons"
+                  onClick={() => setSearchQuery('')}
+                  className="mt-4 text-sm font-semibold text-cyan-400 hover:text-cyan-300 underline underline-offset-4"
+                >
+                  {language === 'fr' ? "Réinitialiser la recherche" : "Clear search filters"}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* VIEW 2: INDIVIDUAL WEEK READINGS VIEWS (STICKY BAR SELECTOR) */}
+        {/* ========================================================================= */}
+        {currentView === 'reader' && (
+          <div className="flex flex-col lg:flex-row gap-8 relative">
+            
+            {/* Sticky Sidebar Week Drawer - Desktop */}
+            <aside className="lg:w-72 shrink-0 lg:sticky lg:top-24 h-fit max-h-[calc(100vh-140px)] overflow-y-auto bg-slate-900/30 p-4 border border-slate-800 rounded-2xl">
+              <div className="mb-4 pb-3 border-b border-slate-850 flex items-center justify-between">
+                <span className="text-xs font-mono font-black tracking-wider text-slate-400 uppercase">
+                  {language === 'fr' ? "Index des 21 Leçons" : "Index of 21 Lessons"}
+                </span>
+                <span className="text-xs font-semibold text-emerald-400 bg-emerald-950/40 border border-emerald-900/30 px-2 py-0.5 rounded-md">
+                  {completedWeeks.length} Done
+                </span>
+              </div>
+              
+              <div className="space-y-1">
+                {curriculumLessons.map((lesson) => {
+                  const isSelected = lesson.week === selectedWeek;
+                  const isCompleted = completedWeeks.includes(lesson.week);
+                  
+                  return (
+                    <button
+                      id={`sidebar-week-link-${lesson.week}`}
+                      key={lesson.week}
+                      onClick={() => setSelectedWeek(lesson.week)}
+                      className={`w-full text-left p-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between border ${
+                        isSelected 
+                          ? 'bg-gradient-to-r from-blue-900/40 to-slate-900 text-cyan-300 border-blue-500/50 shadow-[0_0_10px_rgba(59,130,246,0.15)] scale-[1.01]' 
+                          : 'text-slate-400 hover:text-slate-100 bg-slate-950/20 hover:bg-slate-900 border-transparent hover:border-slate-800'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 max-w-[85%]">
+                        <span className={`w-5 h-5 rounded-md text-[10px] font-mono font-extrabold flex items-center justify-center ${
+                          isSelected ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-300'
+                        }`}>
+                          {lesson.week}
+                        </span>
+                        <span className="truncate">
+                          {language === 'fr' ? lesson.titleFR : lesson.titleEN}
+                        </span>
+                      </div>
+                      
+                      {isCompleted && (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </aside>
+
+            {/* Reading Document Module */}
+            <article className="flex-1 bg-slate-900/20 border border-slate-800 rounded-3xl p-6 md:p-10 relative overflow-hidden backdrop-blur-sm">
+              
+              {/* Subtle top indicator bar */}
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 pointer-events-none"></div>
+
+              {/* Document Header Navigation controls */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-800">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl md:text-4xl font-extrabold text-cyan-400 bg-cyan-950/40 border border-cyan-500/30 w-16 h-16 rounded-2xl flex items-center justify-center shadow-inner">
+                    {activeLesson.week}
+                  </span>
+                  <div>
+                    <span className="text-[10px] font-mono font-bold tracking-widest text-slate-500 uppercase">
+                      {language === 'fr' ? "SUIVI INTÉGRAL DE COURS" : "FULL ARCHIVE COURSE MODULE"}
+                    </span>
+                    <h2 className="text-xl md:text-2xl font-extrabold text-white">
+                      {language === 'fr' ? activeLesson.titleFR : activeLesson.titleEN}
+                    </h2>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950/40 border border-slate-800 p-1.5 rounded-xl">
+                  {/* Previous / Next buttons */}
+                  <button
+                    id="btn-prev-week"
+                    onClick={handlePrevWeek}
+                    disabled={selectedWeek === 1}
+                    className="p-2 border border-slate-700 bg-slate-900 hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-slate-900 text-slate-300 rounded-lg transition-all"
+                    title={t.prev}
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </button>
+                  
+                  <span className="px-3.5 text-xs font-mono font-bold text-slate-400">
+                    {selectedWeek} / 21
+                  </span>
+
+                  <button
+                    id="btn-next-week"
+                    onClick={handleNextWeek}
+                    disabled={selectedWeek === 21}
+                    className="p-2 border border-slate-700 bg-slate-900 hover:bg-slate-800 disabled:opacity-30 disabled:hover:bg-slate-900 text-slate-300 rounded-lg transition-all"
+                    title={t.next}
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Progress and status button inside header */}
+              <div className="p-4 bg-slate-900/60 rounded-2xl border border-slate-800 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-2.5">
+                  <BookMarked className="w-5 h-5 text-emerald-400" />
+                  <span className="text-sm text-slate-300 font-medium select-none">
+                    {language === 'fr' 
+                      ? "Avez-vous étudié les concepts clés et fait l'exercice pratique ?" 
+                      : "Have you analyzed the core values and applied the exercises?"}
+                  </span>
+                </div>
+                
+                <button
+                  id="btn-complete-reader-toggle"
+                  onClick={() => toggleWeekCompletion(activeLesson.week)}
+                  className={`w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-extrabold tracking-wide uppercase transition-all flex items-center justify-center gap-2 cursor-pointer border ${
+                    completedWeeks.includes(activeLesson.week)
+                      ? 'bg-emerald-950/80 border-emerald-500/80 hover:bg-emerald-900 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                      : 'bg-gradient-to-r from-blue-700 to-cyan-600 hover:from-blue-600 hover:to-cyan-500 text-white border-transparent'
+                  } ${microInteractionClassName}`}
+                >
+                  {completedWeeks.includes(activeLesson.week) ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-400" />
+                      <span>{t.completed}</span>
+                    </>
+                  ) : (
+                    <span>{t.markCompleted}</span>
+                  )}
+                </button>
+              </div>
+
+              {/* Content Body Section */}
+              <div className="space-y-8">
+                
+                {/* 1. Core Content */}
+                <section className="prose prose-invert max-w-none">
+                  <div className="text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap font-sans bg-slate-950/20 p-6 rounded-2xl border border-slate-850">
+                    {language === 'fr' ? activeLesson.contentFR : activeLesson.contentEN}
+                  </div>
+                </section>
+
+                {/* 2. Objectives */}
+                <section>
+                  <h3 className="text-base font-extrabold text-cyan-300 mb-4 flex items-center gap-2 select-none">
+                     <span className="w-1.5 h-4 bg-cyan-400 rounded-full"></span>
+                     {t.objectivesTitle}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
+                    {(language === 'fr' ? activeLesson.objectivesFR : activeLesson.objectivesEN).map((obj, i) => (
+                      <div key={i} className="flex gap-3 bg-slate-900/50 p-4 rounded-xl border border-slate-850">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                        <span className="text-xs md:text-sm text-slate-300 font-medium leading-relaxed">{obj}</span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* 3. Practical Exercise */}
+                <section className="bg-emerald-950/10 border border-emerald-900/20 p-6 md:p-8 rounded-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-xl pointer-events-none"></div>
+                  <h3 className="text-base font-extrabold text-emerald-400 mb-3 flex items-center gap-2 select-none">
+                    <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400/20 animate-bounce" />
+                    {t.exerciseTitle}
+                  </h3>
+                  <p className="text-xs md:text-sm text-slate-300 font-medium leading-relaxed bg-slate-950/40 p-4 rounded-xl border border-emerald-900/20">
+                    {language === 'fr' ? activeLesson.excerciseFR : activeLesson.excerciseEN}
+                  </p>
+                </section>
+
+                {/* 4. Inspirational Quote */}
+                <section className="border-t border-slate-800 pt-8">
+                  <div className="text-center p-6 bg-slate-900/20 rounded-2xl relative border border-slate-850 italic">
+                    <p className="text-sm md:text-lg text-slate-200 font-medium mb-3 relative z-10 leading-relaxed">
+                      "{activeLesson.quotes.text}"
+                    </p>
+                    <cite className="not-italic text-xs text-blue-400 font-bold tracking-wide uppercase">
+                      — {activeLesson.quotes.author}
+                    </cite>
+                  </div>
+                </section>
+
+              </div>
+
+              {/* Chapter Footer Navigation shortcuts */}
+              <div className="flex items-center justify-between pt-8 mt-10 border-t border-slate-800">
+                <button
+                  id="footer-back-to-hub"
+                  onClick={() => setCurrentView('dashboard')}
+                  className="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>{language === 'fr' ? "Retour au tableau de bord" : "Back to Dashboard Hub"}</span>
+                </button>
+
+                <div className="flex gap-2.5">
+                  <button
+                    id="footer-prev-chapter"
+                    onClick={handlePrevWeek}
+                    disabled={selectedWeek === 1}
+                    className="px-3 py-1.5 border border-slate-850 bg-slate-900 hover:bg-slate-800 text-[11px] font-bold text-slate-400 hover:text-white disabled:opacity-20 rounded-lg max-sm:hidden transition-all"
+                  >
+                    {t.prev}
+                  </button>
+                  <button
+                    id="footer-next-chapter"
+                    onClick={handleNextWeek}
+                    disabled={selectedWeek === 21}
+                    className="px-3 py-1.5 border border-slate-850 bg-slate-950 hover:bg-slate-900 text-[11px] font-bold text-slate-400 hover:text-white disabled:opacity-20 rounded-lg max-sm:hidden transition-all"
+                  >
+                    {t.next}
+                  </button>
+                </div>
+              </div>
+
+            </article>
+
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* VIEW 3: HELP & AI CHATBOT (KNOWS ALL BIBLIOGRAPHY + 694294406 fallback) */}
+        {/* ========================================================================= */}
+        {currentView === 'help' && (
+          <div className="space-y-12">
+            
+            {/* Title / Intro Hero */}
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
+                {t.supportTitle}
+              </h1>
+              <p className="text-slate-400 text-sm md:text-base leading-relaxed">
+                {language === 'fr'
+                  ? "Explorez notre base de connaissances interactive. Consultez la foire aux questions ou discutez directement avec l'IA formée intégralement sur la curriculum de leadership Team 21. En cas de doute, notre numéro vert direct à un humain reste disponible."
+                  : "Resolve issues instantly. Review our official FAQs or chat with the custom Team 21 AI Assistant, primed with all 21 weeks of curricula. For complex support, coordinators are available directly."}
+              </p>
+            </div>
+
+            {/* Interactive Bot Split View */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              
+              {/* Left Grid: FAQs & General numbers */}
+              <div className="lg:col-span-5 space-y-6">
+                
+                {/* 1. Dynamic FAQ Widget */}
+                <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-5 md:p-6">
+                  <h3 className="text-lg font-extrabold text-white mb-4 flex items-center gap-2 select-none">
+                    <Info className="w-5 h-5 text-blue-400" />
+                    {t.faqTitle}
+                  </h3>
+
+                  <div className="space-y-3.5">
+                    
+                    {/* FAQ item 1 */}
+                    <div className="border border-slate-800 rounded-xl bg-slate-950/40 p-4">
+                      <button
+                        id="btn-faq-1"
+                        onClick={() => setFaqOpen(p => ({ ...p, 0: !p[0] }))}
+                        className="w-full flex items-center justify-between text-left font-bold text-sm text-slate-100 hover:text-cyan-400 transition-colors"
+                      >
+                        <span>
+                          {language === 'fr' ? "Qu'est-ce que Team 21?" : "What is Team 21?"}
+                        </span>
+                        {faqOpen[0] ? <ChevronDown className="w-4 h-4 text-cyan-400" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
+                      </button>
+                      
+                      {faqOpen[0] && (
+                        <p className="text-xs text-slate-400 leading-relaxed mt-3.5 pt-3.5 border-t border-slate-850">
+                          {language === 'fr'
+                            ? "Un programme complet de formation au leadership serviteur sur 21 semaines, structuré pour développer des compétences personnelles et professionnelles à fort impact."
+                            : "A comprehensive 21-week servant leadership training program structured to develop high-impact personal and professional skills."}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* FAQ item 2 */}
+                    <div className="border border-slate-800 rounded-xl bg-slate-950/40 p-4">
+                      <button
+                        id="btn-faq-2"
+                        onClick={() => setFaqOpen(p => ({ ...p, 1: !p[1] }))}
+                        className="w-full flex items-center justify-between text-left font-bold text-sm text-slate-100 hover:text-cyan-400 transition-colors"
+                      >
+                        <span>
+                          {language === 'fr' ? "Comment naviguer dans les semaines?" : "How do I navigate the weeks?"}
+                        </span>
+                        {faqOpen[1] ? <ChevronDown className="w-4 h-4 text-cyan-400" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
+                      </button>
+                      
+                      {faqOpen[1] && (
+                        <p className="text-xs text-slate-400 leading-relaxed mt-3.5 pt-3.5 border-t border-slate-850">
+                          {language === 'fr'
+                            ? "Utilisez le tableau de bord principal ou la barre latérale collante pour progresser chronologiquement de la semaine 1 à la semaine 21."
+                            : "Use the main dashboard or the sticky sidebar slider to chronologically progress from Week 1 through Week 21."}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* FAQ item 3 */}
+                    <div className="border border-slate-800 rounded-xl bg-slate-950/40 p-4">
+                      <button
+                        id="btn-faq-3"
+                        onClick={() => setFaqOpen(p => ({ ...p, 2: !p[2] }))}
+                        className="w-full flex items-center justify-between text-left font-bold text-sm text-slate-100 hover:text-cyan-400 transition-colors"
+                      >
+                        <span>
+                          {language === 'fr' ? "Qu'allez-vous apprendre dans cette académie ?" : "What will you learn in this Academy?"}
+                        </span>
+                        {faqOpen[2] ? <ChevronDown className="w-4 h-4 text-cyan-400" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
+                      </button>
+                      
+                      {faqOpen[2] && (
+                        <p className="text-xs text-slate-400 leading-relaxed mt-3.5 pt-3.5 border-t border-slate-850">
+                          {language === 'fr'
+                            ? "Vous allez découvrir 21 principes essentiels du leadership serviteur, de l'écoute active à l'humilité constructive, avec des explications simples conçues pour tous et de vrais exercices pratiques."
+                            : "You will discover 21 essential servant leadership guidelines, from active listening to constructive humility, with simple explanations designed for everyone and real-world practice exercises."}
+                        </p>
+                      )}
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* 2. Urgent human fallback details */}
+                <div className="p-6 bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/5 rounded-full blur-xl pointer-events-none"></div>
+                  <h4 className="font-extrabold text-sm text-blue-400 uppercase tracking-wider mb-2">
+                    {language === 'fr' ? "Assistance Téléphonique Directe" : "Direct Phone Support Desk"}
+                  </h4>
+                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                    {language === 'fr'
+                      ? "Si notre assistant IA n'arrive pas à répondre à vos requêtes ou si vous souhaitez joindre directement l'administration :"
+                      : "If our virtual AI is occupied, or you need precise structural validation, directly call our coordinator:"}
+                  </p>
+                  
+                  <div className="flex items-center gap-3 bg-slate-950/80 border border-slate-850 p-3 rounded-xl mb-3">
+                    <Smartphone className="w-5 h-5 text-cyan-400" />
+                    <div>
+                      <p className="text-[10px] font-semibold text-slate-500 leading-none">TELEPHONE</p>
+                      <a href="tel:694294406" className="text-sm font-black text-white hover:text-cyan-300 transition-colors mt-1 block">
+                        +237 694 294 406
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 bg-slate-950/80 border border-slate-850 p-3 rounded-xl">
+                    <Mail className="w-5 h-5 text-cyan-400" />
+                    <div>
+                      <p className="text-[10px] font-semibold text-slate-500 leading-none">E-MAIL DIRECT</p>
+                      <a href="mailto:forteh@gmail.com" className="text-sm font-black text-white hover:text-cyan-300 transition-colors mt-1 block">
+                        forteh@gmail.com
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Right Grid: Active Live Chat widget */}
+              <div className="lg:col-span-7 bg-slate-900/40 border border-slate-800 rounded-2xl flex flex-col h-[600px] overflow-hidden relative backdrop-blur-sm">
+                
+                {/* Chat header */}
+                <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-800 flex items-center justify-center relative">
+                      <Sparkles className="w-5 h-5 text-cyan-400 animate-pulse" />
+                      {/* Active green dot */}
+                      <span className="w-2.5 h-2.5 bg-emerald-500 border-2 border-slate-950 rounded-full absolute -bottom-0.5 -right-0.5"></span>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-slate-100">Team 21 AI Mentor</h4>
+                      <p className="text-[10px] text-slate-400">{t.botHeaderDesc}</p>
+                    </div>
+                  </div>
+                  
+                  {/* Human tel quick key on top of chat */}
+                  <div className="text-right">
+                    <span className="text-[10px] font-semibold text-slate-400 block lg:hidden">{t.humanAlternative}</span>
+                    <a href="tel:694294406" className="hidden lg:inline bg-slate-900 border border-slate-700 hover:border-blue-500/50 hover:bg-slate-850 px-3 py-1.5 rounded-lg text-xs font-black text-cyan-300 transition-all select-none">
+                      Call 694 294 406
+                    </a>
+                  </div>
+                </div>
+
+                {/* Messages Panel wrapper */}
+                <div className="flex flex-col flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-slate-950/20">
+                  {chatMessages.map((msg, i) => {
+                    const isBot = msg.role === 'assistant';
+                    return (
+                      <div 
+                        id={`chat-msg-${i}`}
+                        key={i} 
+                        className={`flex gap-3 max-w-[85%] ${
+                          isBot ? 'self-start' : 'self-end ml-auto flex-row-reverse'
+                        }`}
+                      >
+                        {/* Avatar */}
+                        <div className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center text-xs font-black border ${
+                          isBot 
+                            ? 'bg-cyan-950 border-cyan-800 text-cyan-400' 
+                            : 'bg-blue-950 border-blue-800 text-blue-400'
+                        }`}>
+                          {isBot ? "AI" : "ME"}
+                        </div>
+
+                        {/* Content text buble */}
+                        <div>
+                          <div className={`p-4 rounded-2xl text-xs md:text-sm font-medium leading-relaxed shadow-md ${
+                            isBot 
+                              ? 'bg-slate-900 border border-slate-800 text-slate-200 rounded-tl-none' 
+                              : 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white rounded-tr-none'
+                          }`}>
+                            <p className="whitespace-pre-wrap">{msg.content}</p>
+                          </div>
+                          
+                          {/* Time tag */}
+                          <span className="text-[9px] text-slate-500 font-medium block mt-1 px-1 text-right">
+                            {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  
+                  {/* Loader wrapper */}
+                  {chatLoading && (
+                    <div className="flex gap-3 max-w-[80%] self-start">
+                      <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-800 flex items-center justify-center text-xs font-black text-cyan-300">
+                        AI
+                      </div>
+                      <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 rounded-tl-none">
+                        <div className="flex items-center gap-1.5 py-1">
+                          <span className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce delay-75"></span>
+                          <span className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                          <span className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce [animation-delay:0.35s]"></span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Direct quick questions chips */}
+                <div className="p-3 bg-slate-900/40 border-t border-slate-800/80 flex gap-2 overflow-x-auto select-none no-scrollbar">
+                  {[
+                    language === 'fr' ? "Qu'est-ce que la semaine 1 ?" : "What is taught in Week 1?",
+                    language === 'fr' ? "Parle-moi de l'écoute active" : "Tell me about active listening",
+                    language === 'fr' ? "Comment contacter l'équipe ?" : "How can I contact a human?"
+                  ].map((chip, idx) => (
+                    <button
+                      id={`chat-chip-${idx}`}
+                      key={idx}
+                      onClick={() => setChatInput(chip)}
+                      className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-500/40 text-[10px] md:text-xs font-bold text-slate-400 hover:text-cyan-300 transition-colors shrink-0 cursor-pointer"
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Input text drawer form */}
+                <form 
+                  id="form-chat-submit"
+                  onSubmit={handleSendChatMessage} 
+                  className="p-3 bg-slate-950/80 border-t border-slate-800 flex gap-2"
+                >
+                  <input
+                    id="input-chat-message"
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder={t.chatInputPlaceholder}
+                    disabled={chatLoading}
+                    className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xs md:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50"
+                  />
+                  <button
+                    id="btn-chat-send"
+                    type="submit"
+                    disabled={!chatInput.trim() || chatLoading}
+                    className="p-3 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-slate-950 disabled:opacity-30 disabled:from-slate-850 disabled:text-slate-600 rounded-xl transition-all flex items-center justify-center cursor-pointer shadow-lg shadow-cyan-500/10"
+                  >
+                    <Send className="w-4.5 h-4.5" />
+                  </button>
+                </form>
+
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* VIEW 4: CONTACT & WHATSAPP SUPPORT GATEWAYS */}
+        {/* ========================================================================= */}
+        {currentView === 'contact' && (
+          <div className="space-y-12">
+            
+            {/* Split View Header */}
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
+                {language === 'fr' ? "Contacter l'Administration" : "Speak to our Coordinators"}
+              </h1>
+              <p className="text-slate-400 text-sm md:text-base leading-relaxed">
+                {language === 'fr'
+                  ? "Nous sommes entièrement disponibles pour écouter vos retours stratégiques. Envoyez un message WhatsApp instantané ou utilisez notre portail de messagerie directe ci-dessous."
+                  : "We are available 24/7. Connect instantly using our WhatsApp direct link API support or submit a customized email directly to our workspace desk."}
+              </p>
+            </div>
+
+            {/* Split Layout Container */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+              
+              {/* Left Column: Direct WhatsApp Action Card */}
+              <div 
+                id="card-whatsapp-contact"
+                className={`bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 relative overflow-hidden flex flex-col items-center text-center ${microInteractionClassName}`}
+              >
+                {/* Glowing aesthetic backdrop */}
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+                <div className="absolute bottom-[-50px] right-[-50px] w-48 h-48 bg-emerald-500/5 rounded-full blur-[50px] pointer-events-none"></div>
+
+                <div className="w-20 h-20 rounded-2xl bg-emerald-950/60 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shadow-md shadow-emerald-500/10 mb-6">
+                  {/* WhatsApp styling approximation with smartphone and messaging logos */}
+                  <div className="relative">
+                    <Smartphone className="w-10 h-10 animate-bounce" />
+                    <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+                  </div>
+                </div>
+
+                <h3 className="text-xl font-extrabold text-white mb-2 leading-none">
+                  {t.whatsappTitle}
+                </h3>
+                <p className="text-cyan-400 font-mono font-bold text-sm tracking-wide mb-4">
+                  +237 694 294 406
+                </p>
+                <p className="text-xs text-slate-400 leading-relaxed max-w-sm mb-8">
+                  {t.whatsappCardDesc}
+                </p>
+
+                {/* Direct Action Link button open in a new tab */}
+                <a
+                  id="link-whatsapp-action"
+                  href="https://wa.me/237694294406?text=Hello%20Team%2021%20Servant%20Leadership%20Academy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 font-black tracking-wide text-xs md:text-sm uppercase shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 hover:scale-[1.01] transition-all cursor-pointer"
+                >
+                  <span>{t.whatsappBtn}</span>
+                  <ExternalLink className="w-4 h-4 text-slate-950" />
+                </a>
+              </div>
+
+              {/* Right Column: validated direct Email Form portal */}
+              <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6 md:p-8 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+                
+                <h3 className="text-xl font-extrabold text-white mb-2">
+                  {t.emailTitle}
+                </h3>
+                <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                  {t.emailCardDesc}
+                </p>
+
+                {formSubmitted ? (
+                  <div className="py-12 px-4 text-center">
+                    <div className="w-16 h-16 rounded-full bg-emerald-950 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-4 animate-pulse-glow">
+                      <Check className="w-8 h-8" />
+                    </div>
+                    <h4 className="text-base font-extrabold text-white mb-2">
+                      {t.formSuccess}
+                    </h4>
+                    <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto mb-8">
+                      {language === 'fr'
+                        ? "Votre client de messagerie natif devrait s'ouvrir automatiquement avec les champs d'e-mail préremplis pour forteh@gmail.com."
+                        : "Your default mailing software should open instantly with the message formatted perfectly to forteh@gmail.com."}
+                    </p>
+                    <button
+                      id="btn-reset-form"
+                      onClick={handleResetContactForm}
+                      className="px-5 py-2.5 bg-slate-900 border border-slate-800 text-xs font-semibold text-cyan-400 hover:text-white rounded-xl transition-all"
+                    >
+                      {t.writeAnother}
+                    </button>
+                  </div>
+                ) : (
+                  <form id="form-email-contact" onSubmit={handleContactSubmit} className="space-y-4">
+                    
+                    {/* Name input */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none">
+                        {t.fullname} <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="input-contact-name"
+                        type="text"
+                        value={contactName}
+                        onChange={(e) => setContactName(e.target.value)}
+                        className={`w-full bg-slate-950 border ${
+                          formErrors.name ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-cyan-500/50'
+                        } rounded-xl px-4 py-3 text-xs md:text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-all`}
+                        placeholder="John Doe"
+                      />
+                      {formErrors.name && (
+                        <span className="text-[10px] font-semibold text-red-400 block mt-1">{formErrors.name}</span>
+                      )}
+                    </div>
+
+                    {/* Subject input */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none">
+                        {t.subject} <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="input-contact-subject"
+                        type="text"
+                        value={contactSubject}
+                        onChange={(e) => setContactSubject(e.target.value)}
+                        className={`w-full bg-slate-950 border ${
+                          formErrors.subject ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-cyan-500/50'
+                        } rounded-xl px-4 py-3 text-xs md:text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-all`}
+                        placeholder="Question about Week 4 - Vision Setting..."
+                      />
+                      {formErrors.subject && (
+                        <span className="text-[10px] font-semibold text-red-400 block mt-1">{formErrors.subject}</span>
+                      )}
+                    </div>
+
+                    {/* Message input */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 select-none">
+                        {t.message} <span className="text-red-500">*</span>
+                      </label>
+                      <textarea
+                        id="input-contact-message"
+                        rows={5}
+                        value={contactMessage}
+                        onChange={(e) => setContactMessage(e.target.value)}
+                        className={`w-full bg-slate-950 border ${
+                          formErrors.message ? 'border-red-500/50 focus:border-red-500' : 'border-slate-800 focus:border-cyan-500/50'
+                        } rounded-xl px-4 py-3 text-xs md:text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-all resize-none`}
+                        placeholder={language === 'fr' ? "Bonjour l'équipe Team 21..." : "Hello Team 21 team..."}
+                      />
+                      {formErrors.message && (
+                        <span className="text-[10px] font-semibold text-red-400 block mt-1">{formErrors.message}</span>
+                      )}
+                    </div>
+
+                    {/* Submit Button */}
+                    <button
+                      id="btn-email-submit"
+                      type="submit"
+                      className="w-full inline-flex items-center justify-center gap-2 px-5 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-slate-950 font-black tracking-wide text-xs uppercase shadow-lg shadow-cyan-500/10 cursor-pointer"
+                    >
+                      <Mail className="w-4 h-4 text-slate-950" />
+                      <span>{t.sendBtn}</span>
+                    </button>
+
+                  </form>
+                )}
+
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+      </main>
+
+      {/* --- FOOTER --- */}
+      <footer className="mt-auto border-t border-slate-900 bg-slate-950/40 py-8 text-center text-slate-500 text-xs font-medium">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p>
+            © {new Date().getFullYear()} <span className="text-slate-300 font-bold">{t.brand} Academy</span>. {language === 'fr' ? "Tous droits réservés." : "All rights reserved."}
+          </p>
+          <div className="flex items-center gap-4 text-[11px] font-semibold">
+            <span className="text-[#3b82f6]">{language === 'fr' ? "Portail Officiel de Leadership" : "Official Leadership Portal"}</span>
+            <span className="text-slate-700">|</span>
+            <span>+237 694 294 406</span>
+            <span className="text-slate-700">|</span>
+            <span>forteh@gmail.com</span>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  );
+}
